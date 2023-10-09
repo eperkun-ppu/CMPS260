@@ -28,7 +28,13 @@ console.log("The linked list data structure");
 //    is it faster)? If yes, how much faster? If no, why does it take the same
 //    amount of time?
 
-
+/*
+  An array would be more efficient than a LinkedList at retrieving the last entry.
+  To reach the end of a LinkedList, you need to start at the head and iterate through
+  all of the "next" variables until you reach the end, which will be the last entry.
+  With an array, you can retrive the last entry by referencing the index of the size
+  minus one, ie: array[array.length - 1]
+*/
 
 //------------------------//
 // Creating a linked list //
@@ -131,7 +137,7 @@ function LinkedList() {
   this.indexOf = function(element) {
     // return the index of an element in the list
     var current = head,
-        index = -1;
+        index = 0;
 
     while(current) {
       if(element === current.element) {
@@ -185,21 +191,171 @@ var list = new LinkedList();
 // 2. Translate your pseudo code into actual code and test it.
 //    HINT: Use list.print() to test your code.
 
+/*
+  this.append = function(element) {
+    var node = new Node(element), // Create new node from the element passed in
+        current;
+
+    if(head === null) {
+      head = node; // If there is no head (list is empty), set head to the new node
+    } else {
+      current = head;
+
+      // Loop through to find the last node
+      while(current.next) {
+        current = current.next;
+      }
+
+      // At the last node, set "next" to the new value
+      current.next = node;
+    }
+
+    // Increment length
+    length++;
+  };
+*/
+
+console.log("Append");
+list.append("a");
+list.append("b");
+list.append("c");
+list.print();
+
 // 3. Repeat (1) and (2) for insert.
+
+/*
+  this.insert = function(position, element) {
+    if(position >= 0 && position <= length) {  // Check if the provided position is valid
+      var node = new Node(element),            // Create node for new element
+          current = head,                      //
+          previous,                            // Placeholder variables to keep track of where we're at in the list
+          index = 0;                           //
+      
+      if(position === 0) {                     // If provided position is 0 (the front)...
+        node.next = current;                   // Set "next" in the new node to the current head
+        head = node;                           // Set LinkedList head to the new node.  The effect of this is that
+                                               // the new value inserted is at position 0, and the rest of the
+                                               // list is added back on behind it.
+      } else {                                 // If provided position is not 0...
+        while(index++ < position) {            // Loop while the index + 1 is less than the requested position
+          previous = current;                  // Set previous placeholder to current value
+          current = current.next;              // Set current placeholder to the next value
+        }
+        node.next = current;                   // The position has been found, so set "next" in the new node 
+                                               // to what is already there.
+        previous.next = node;                  // Set requested position to the new node
+      }
+
+      length++;                                // Increment length
+      return true;
+    } else {
+      return false;
+    }
+  };
+*/
+
+console.log("Insert");
+list.insert(2, "d");
+list.insert(0, "f");
+list.print();
 
 // 4. Repeat (1) and (2) for removeAt.
 
+/*
+  this.removeAt = function(position) {
+    if(position > -1 && position < length) { // Check if provided position is valid
+      var current = head,            //
+          previous,                  // Placeholder variables to keep track of where we're at in the list
+          index = 0;                 //
+
+      if(position === 0) {           // If provided position is 0 (the front)...
+        head = current.next;         // Set head to the next node in the head, effectively removing the first value
+      } else {                       // If provided position is not zero...
+        while(index++ < position) {  // Loop while the index + 1 is less than the requested position
+          previous = current;        // Set previous placeholder to current value
+          current = current.next;    // Set current placeholder to the next value
+        }
+        previous.next = current.next; // Position is found, set the previous next value to the current next value
+                                      // removing the value at the provided position
+      }
+
+      length--;                       // Subtract from length
+      return current.element;    
+    } else {
+      return null;
+    }
+  };
+*/
+
+console.log("Remove at");
+list.removeAt(1);
+list.removeAt(3);
+list.print();
+
 // 5. Repeat (1) and (2) for remove.
+
+/*
+  this.remove = function(element) {
+    var index = this.indexOf(element);  // Retrieve the index of the provided element
+    return this.removeAt(index);        // Use removeAt function with the found index
+  };
+*/
+
+console.log("Remove");
+list.remove("f");
+list.print();
 
 // 6. Repeat (1) and (2) for indexOf.
 
+/*
+  this.indexOf = function(element) {
+    var current = head,                  // Placeholder for current value, initialize to head
+        index = 0;                       // Index placeholder
+
+    while(current) {                     // Loop while current value exists
+      if(element === current.element) {  // If current element matches requested element
+        return index;                    // Return the index
+      }
+      index++;                           // If not, increment the index and continue traversing
+      current = current.next;
+    }
+
+    return -1;
+  };
+*/
+
+console.log("Index of b: " + list.indexOf("b"));
+console.log("Index of d: " + list.indexOf("d"));
+
 // 7. Repeat (1) and (2) for isEmpty.
+
+/*
+  this.isEmpty = function() {
+    return length === 0;  // Return boolean value of whether length is 0 or not
+  };
+*/
+
+console.log("Is list empty? " + list.isEmpty());
 
 // 8. Repeat (1) and (2) for size.
 
+/*
+  this.size = function() {
+    return length;  // Returned stored length variable
+  };
+*/
+
+console.log("Size of list: " + list.size());
+
 // 9. Repeat (1) and (2) for getHead.
 
+/*
+  this.getHead = function() {
+    return head;  // Return head node
+  }
+*/
 
+console.log("Head node: " + list.getHead().element);
 
 </script>
 </head>

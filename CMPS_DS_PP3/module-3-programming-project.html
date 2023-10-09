@@ -24,16 +24,16 @@ console.log("Project");
 
 // 1. Implement the linked list data structure using the prototype.
 
-function LinkedList() {
-  // helper class
-  function Node(element) {
-    this.element = element;
-    this.next = null;
-  }
+// helper class
+function Node(element) {
+  this.element = element;
+  this.next = null;
+}
 
+function LinkedList() {
   // store length and head
-  var length = 0;
-  var head = null;
+  this.length = 0;
+  this.head = null;
 }
 
 // add the prototype methods
@@ -152,7 +152,7 @@ LinkedList.prototype.toString = function() {
   var current = this.head;
   var string = "List: ";
   while (current) {
-    string += current.element + (current.next ? " -> " : "");
+    string += current.element.name + (current.next ? " -> " : "");
     current = current.next;
   }
   return string;
@@ -210,27 +210,104 @@ list2.append(a2);
 //    node and not the element!).
 
 LinkedList.prototype.getNodeAt = function(position) {
-  
-}
+  if(position < 0) return null;
+
+  var current = this.head;
+  var index = 0;
+
+  while(current) {
+    if(index === position) return current;
+    current = current.next;
+    index++;
+  }
+
+  return null;
+};
 
 // 4. Implement an appendNode(node) method (using the prototype) that appends a
 //    node to a linked list (as opposed to an element!).
 
+LinkedList.prototype.appendNode = function(node) {
+  // add a new item to the end of the list
+  var current;
+
+  if(this.head === null) {
+    this.head = node;
+  } else {
+    current = this.head;
+
+    while(current.next) {
+      current = current.next;
+    }
+
+    current.next = node;
+  }
+
+  this.length++;
+};
+
 // 5. Uncomment the lines below and make sure the correct directions are
 //    printed (see above).
 
-//var tmpNode = list1.getNodeAt(1); // NOTE: this is the node containing B
-//list2.appendNode(tmpNode); // append 'node B' to 'node A2'
-//list1.print();
-//list2.print();
+var tmpNode = list1.getNodeAt(1); // NOTE: this is the node containing B
+list2.appendNode(tmpNode); // append 'node B' to 'node A2'
+list1.print();
+list2.print();
 
 // 6. Follow the same steps for directions (3). First add A3 and A4 to list3,
 //    then get the third node (second position) from list1, and append this
 //    node to list3.
 
+list3.append(a3);
+list3.append(a4);
+var thirdNode = list1.getNodeAt(2);
+list3.appendNode(thirdNode);
+list3.print();
+
 // 7. What is the problem with the size() method? How can you fix this?
 
+console.log("List 1 size: " + list1.size());
+console.log("List 2 size: " + list2.size());
+console.log("List 3 size: " + list3.size());
 
+/*
+  The issue with the size() method is that it returns the length variable
+  from the LinkedList, and the appendNode functionss only increments this
+  variable by 1 regardless of how many items are added.
+
+  For example, when "tmpNode" and "thirdNode" are added to list1 and list2,
+  these nodes contain 4 and 3 values respectively. See code below:
+*/
+
+console.log(tmpNode);
+console.log(thirdNode);
+
+/*
+  There are two ways I could think of to fix this, either by adding logic
+  to appendNode to count how many values the nodes contain and incrementing
+  the length accordingly, or by calculating the length in the size function
+  itself. I will take the latter approach here:
+*/
+
+LinkedList.prototype.correctedSize = function() {
+  var current = this.head;
+  var size = 0;
+
+  while(current) {
+    size++;
+    current = current.next;
+  }
+
+  return size;
+};
+
+/*
+  Now the output of the correctedSize function shows as expected:
+*/
+
+console.log("List 1 size: " + list1.correctedSize());
+console.log("List 2 size: " + list2.correctedSize());
+console.log("List 3 size: " + list3.correctedSize());
 
 </script>
 </head>
