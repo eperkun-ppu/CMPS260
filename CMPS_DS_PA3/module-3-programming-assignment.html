@@ -137,7 +137,7 @@ function LinkedList() {
   this.indexOf = function(element) {
     // return the index of an element in the list
     var current = head,
-        index = 0;
+        index = -1;
 
     while(current) {
       if(element === current.element) {
@@ -310,7 +310,7 @@ list.print();
 /*
   this.indexOf = function(element) {
     var current = head,                  // Placeholder for current value, initialize to head
-        index = 0;                       // Index placeholder
+        index = -1;                       // Index placeholder
 
     while(current) {                     // Loop while current value exists
       if(element === current.element) {  // If current element matches requested element
