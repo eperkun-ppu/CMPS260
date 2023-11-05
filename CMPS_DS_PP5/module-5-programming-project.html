@@ -334,15 +334,293 @@ console.log("Search for 27? " + tree.search(27));
 
 // 12 Implement the graph data structure using the prototype.
 
+/*
+  Supplmentary data structures
+*/
+function Dictionary() {
+  // store all elements in the items object
+  this.items = {};
+}
+
+Dictionary.prototype.set = function(key, value) {
+  // add a new key-value pair to the dictionary
+  this.items[key] = value;
+};
+
+Dictionary.prototype.delete = function(key) {
+  // delete a key-value pair
+  if(this.has(key)) {
+    delete this.items[key];
+    return true;
+  }
+
+  return false;
+};
+
+Dictionary.prototype.has = function(key) {
+  // return true if key is in the dictionary, false otherwise
+  return key in this.items;
+};
+
+Dictionary.prototype.get = function(key) {
+  // return the value that matches key
+  return this.has(key) ? this.items[key] : undefined;
+};
+
+Dictionary.prototype.clear = function() {
+  // remove all key-value pairs
+  this.items = {};
+};
+
+Dictionary.prototype.size = function() {
+  // returns the number of key-value pairs
+  return Object.keys(this.items).length;
+};
+
+Dictionary.prototype.keys = function() {
+  // return an array of all the keys
+  return Object.keys(this.items);
+};
+
+Dictionary.prototype.values = function() {
+  // return an array of all the values
+  var values = [];
+
+  for(var k in items) {
+    if(this.has(k)) {
+      values.push(items[k]);
+    }
+  }
+
+  return values;
+};
+
+Dictionary.prototype.print = function() {
+  var keys = this.keys();
+
+  for(var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var value = this.get(key);
+    console.log(key + ' - ' + value);
+  }
+}
+
+Dictionary.prototype.getItems = function() {
+  return this.items;
+};
+
+function Queue() {
+  this.items = [];
+}
+
+Queue.prototype.enqueue = function(element) {
+  this.items.push(element);
+}
+
+Queue.prototype.dequeue = function() {
+  return this.items.shift();
+}
+
+Queue.prototype.front = function() {
+  return this.items[0];
+}
+
+Queue.prototype.isEmpty = function() {
+  return this.items.length == 0;
+}
+
+Queue.prototype.size = function() {
+  return this.items.length;
+}
+
+Queue.prototype.print = function() {
+  console.log(this.items.toString());
+}
+
+Queue.prototype.toString = function() {
+  return this.items.toString();
+}
+
+function Graph() {
+  this.vertices = [];
+  this.adjList = new Dictionary();
+
+  this.graph = [[0, 2, 4, 0, 0, 0],
+              [2, 0, 2, 4, 2, 0],
+              [4, 2, 0, 0, 3, 0],
+              [0, 4, 0, 0, 3, 2],
+              [0, 2, 3, 3, 0, 2],
+              [0, 0, 0, 2, 2, 0]];
+}
+
+Graph.prototype.addVertex = function(v) {
+  this.vertices.push(v);
+  this.adjList.set(v, []);
+};
+
+Graph.prototype.addEdge = function(v, w) {
+  this.adjList.get(v).push(w);
+  this.adjList.get(w).push(v);
+};
+
+Graph.prototype.initializeColor = function(){
+  var color = [];
+  for (var i = 0; i < this.vertices.length; i++){
+    color[this.vertices[i]] = 'white';
+  }
+  return color;
+};
+
+Graph.prototype.bfs = function(v, callback) {
+  var color = this.initializeColor(),
+  queue = new Queue();
+  queue.enqueue(v);
+  while(!queue.isEmpty()) {
+    var u = queue.dequeue(),
+    neighbors = this.adjList.get(u);
+    color[u] = 'grey';
+    for(var i = 0; i < neighbors.length; i++) {
+      var w = neighbors[i];
+      if(color[w] === 'white') {
+        color[w] = 'grey';
+        queue.enqueue(w);
+      }
+    }
+    color[u] = 'black';
+    if(callback) {
+      callback(u);
+    }
+  }
+};
+
+Graph.prototype.dfs = function(callback) {
+  var color = this.initializeColor();
+  for(var i = 0; i < this.vertices.length; i++) {
+    if(color[this.vertices[i]] === 'white') {
+      dfsVisit(this.vertices[i], color, callback);
+    }
+  }
+};
+
+Graph.prototype.dfsVisit = function(u, color, callback) {
+  color[u] = 'grey';
+  if(callback) {
+    callback(u);
+  }
+  var neighbors = adjList.get(u);
+  for (var i = 0; i < neighbors.length; i++) {
+    var w = neighbors[i];
+    if (color[w] === 'white') {
+      this.dfsVisit(w, color, callback);
+    }
+  }
+  color[u] = 'black';
+};
+
+Graph.prototype.dijkstra = function(src) {
+  var dist = [], visited = [],
+  length = this.graph.length;
+  for (var i = 0; i < length; i++) { //{1}
+    dist[i] = Infinity;
+    visited[i] = false;
+  }
+  dist[src] = 0; //{2}
+  for (var i = 0; i < length-1; i++) { //{3}
+    var u = minDistance(dist, visited); //{4}
+    visited[u] = true; //{5}
+    for (var v = 0; v < length; v++){
+      if (!visited[v] && this.graph[u][v]!=0 && dist[u] != Infinity && dist[u]+this.graph[u][v] < dist[v]) { //{6}
+        dist[v] = dist[u] + this.graph[u][v]; //{7}
+      }
+    }
+  }
+  return dist; //{8}
+};
+
+Graph.prototype.minDistance = function(dist, visited){
+  var min = Infinity, minIndex = -1;
+  for(var v = 0; v < dist.length; v++) {
+    if(visited[v] == false && dist[v] <= min) {
+      min = dist[v];
+      minIndex = v;
+    }
+  }
+  return minIndex;
+};
+
+Graph.prototype.toString = function() {
+  var s = '';
+  for(var i = 0; i < this.vertices.length; i++) {
+    s += this.vertices[i] + ' -> ';
+    var neighbors = this.adjList.get(this.vertices[i]);
+    for(var j = 0; j < neighbors.length; j++) {
+      s += neighbors[j] + ' ';
+    }
+    s += '\n';
+  }
+  return s;
+};
+
+console.log("Graph Test");
+var graph = new Graph();
+var myVertices = ['A','B','C','D','E','F','G','H','I'];
+
+for(var i = 0; i < myVertices.length; i++) {
+  graph.addVertex(myVertices[i]);
+}
+
+graph.addEdge('A', 'B');
+graph.addEdge('A', 'C');
+graph.addEdge('A', 'D');
+graph.addEdge('C', 'D');
+graph.addEdge('C', 'G');
+graph.addEdge('D', 'G');
+graph.addEdge('D', 'H');
+graph.addEdge('B', 'E');
+graph.addEdge('B', 'F');
+graph.addEdge('E', 'I');
+console.log(graph.toString());
+
 // 13 Implement Prim's algorithm (use code from the book).
 //    NOTE1: You do not need to use the code from (12) for this question.
 //    NOTE2: Replace INF (used in the book) with Infinity.
+
+Graph.prototype.prim = function() {
+  var parent = [], key = [], visited = [];
+  length = this.graph.length, i;
+
+  for (i = 0; i < length; i++){ //{1}
+    key[i] = Infinity;
+    visited[i] = false;
+  }
+
+  key[0] = 0; //{1}
+  parent[0] = -1;
+
+  for (i = 0; i < length-1; i++) { //{3}
+    var u = this.minDistance(key, visited); //{4}
+    visited[u] = true; //{5}
+    for (var v = 0; v < length; v++){
+      if (this.graph[u][v] && visited[v] == false
+      && this.graph[u][v] < key[v]){ //{6}
+        parent[v] = u; //{7}
+        key[v] = this.graph[u][v]; //{8}
+      }
+    }
+  }
+
+  return parent; //{9}
+};
 
 // 14 Show that your code works using the example from the book in the minimum
 //    spanning tree section. Print both the edges and the weights that are part
 //    of the minimum spanning tree.
 
-
+console.log("Prim's algorithm test");
+var mst = graph.prim();
+for(var i = 0; i < graph.graph.length; i++) {
+  console.log("Edge: " + mst[i] + " - " + i + " Weight: " + graph.graph[i][mst[i]]);
+}
 
 </script>
 </head>
