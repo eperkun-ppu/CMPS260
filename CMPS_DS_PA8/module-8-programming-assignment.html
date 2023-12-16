@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CMPS 260: Module 8 Programming Assignment</title>
+<style>* { font-family: monospace; }</style>
+<script>
+
+// NOTE: You must implement the data structures using the no prototype approach.
+//       This is what the book uses, so you can copy it.
+//       See also: https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+
+// NOTE: Please review the following links regularly:
+//       https://it.pointpark.edu/tutorials/arrays-vs-objects/
+//       https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+//       https://it.pointpark.edu/tutorials/implementation-vs-interface/
+
+
+
+//----------------//
+// Big O notation //
+//----------------//
+console.log("Big O notation");
+
+// 1. Analyze the complexity of the isPalindrome function below. Make a
+//    distinction between best, worst, and average case complexity.
+
+function isPalindrome(str) {
+  for (var i = 0; i < str.length/2; i++) {
+    if (str[i] !== str[str.length-i-1]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+/*
+  Best case: O(1)
+  Average case: O(n/2)
+  Worst case: O(n)
+*/
+
+// 2. Write a program that finds the minimum element in a stack in O(1) time
+//    complexity. Note that earlier solutions searched through the elements on
+//    the stack but that leads to an O(n) solution.
+//    NOTE: this question is sometimes asked on interviews.
+
+/*
+  Based on min stack implementation from: https://takeuforward.org/data-structure/implement-min-stack-o2n-and-on-space-complexity/
+*/
+
+function MinStack() {
+  function Pair(x, y) {
+    this.x = x;
+    this.y = y
+  }
+
+  var items = [];
+  var minElement;
+
+  this.push = function(element) {
+    var min;
+
+    if(this.isEmpty()) {
+      min = element;
+    } else {
+      min = Math.min(this.peek().y, element);
+    }
+
+    items.push(new Pair(element, min));
+  };
+
+  this.pop = function() {
+    return items.pop().x;
+  };
+
+  this.peek = function() {
+    return items[items.length - 1];
+  };
+
+  this.isEmpty = function() {
+    return items.length == 0;
+  };
+
+  this.size = function() {
+    return items.length;
+  };
+
+  this.clear = function() {
+    items = [];
+  };
+
+  this.print = function() {
+    console.log(items.toString());
+  };
+
+  this.toString = function() {
+    return items.toString();
+  };
+
+  this.getMinimum = function() {
+    return this.peek().y;
+  }
+};
+
+var stack = new MinStack();
+stack.push(11);
+stack.push(9);
+stack.push(60);
+stack.push(93);
+stack.push(4);
+stack.push(27);
+console.log(stack.getMinimum());
+
+stack.push(1);
+console.log(stack.getMinimum());
+
+stack.pop();
+console.log(stack.getMinimum());
+
+stack.pop();
+stack.pop();
+console.log(stack.getMinimum());
+
+//----------------------------//
+// Having fun with algorithms //
+//----------------------------//
+console.log("Having fun with algorithms");
+
+// 1. Solve Project Euler problem 1 (https://projecteuler.net/problem=1).
+
+var sum = 0;
+for(var i = 0; i < 1000; i++) {
+  if(i % 3 === 0 || i % 5 === 0) sum += i;
+}
+
+console.log(sum)
+
+// 2. Solve Project Euler problem 2 (https://projecteuler.net/problem=2).
+
+var sum = 0;
+var current = 1;
+var next = 2;
+
+while(current <= 4000000) {
+  if(current % 2 === 0) sum += current;
+
+  var newNext = current + next;
+  current = next;
+  next = newNext;
+}
+
+console.log(sum);
+
+</script>
+</head>
+<body>
+  See console!
+</body>
+</html>

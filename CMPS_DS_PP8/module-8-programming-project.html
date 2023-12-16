@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>CMPS 260: Module 8 Programming Project</title>
+<style>* { font-family: monospace; }</style>
+<script>
+
+// NOTE: You must implement the data structures using the prototype approach.
+//       This is not what the book uses, so you have to convert it.
+//       See also: https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+
+// NOTE: Please review the following links regularly:
+//       https://it.pointpark.edu/tutorials/arrays-vs-objects/
+//       https://it.pointpark.edu/tutorials/no-prototype-vs-prototype/
+//       https://it.pointpark.edu/tutorials/implementation-vs-interface/
+
+
+
+//---------//
+// Project //
+//---------//
+console.log("Project");
+
+// 1. What is the worst case complexity of the following function?
+
+function hasDuplicates(arr) {
+  for (var i = 0; i < arr.length; i++) {
+    for (var j = 0; j < arr.length; j++) {
+      if (i !== j && arr[i] === arr[j]) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+/*
+  O(n^2)
+*/
+
+// 2. Implement a faster version of the same function and analyze the
+//    complexity of this approach.
+
+function hasDuplicatesFast(arr) {
+  var list = [];
+
+  for(var i = 0; i < arr.length; i++) {
+    var item = arr[i];
+
+    if(list.indexOf(item) != -1) {
+      return true;
+    }
+
+    list.push(item);
+  }
+
+  return false;
+}
+
+var test = [1, 9, 5, 6, 12];
+var test2 = [1, 9, 5, 6, 12, 12];
+console.log(hasDuplicatesFast(test));
+console.log(hasDuplicatesFast(test2));
+
+/*
+  Complexity of this approach is: O(n)
+*/
+
+// 3. The travelling salesman problem is a another classic problem and we are
+//    going to solve it using a greedy algorithm. Before starting, please read
+//    through the article on Wikipedia:
+//      https://en.wikipedia.org/wiki/Travelling_salesman_problem
+//    Then implement the following:
+//    (a) Create a graph that represents the example symmetric TSP problem on
+//        the Wikipedia page.
+//    (b) Implement a greedy search that finds the shortest path. You should
+//        have the following steps: (1) pick node A as the starting position,
+//        (2) pick the closest neighbor that has not been visited as the next
+//        city to visit, (3) continue this process until returning to A,
+//        (4) print the final length of the path and also the sequence of
+//        the cities.
+//    (c) Check your results, do they make sense? Is is the optimal solution?
+
+// 4. Solve https://csacademy.com/contest/interview-archive/task/intersecting-rectangles/
+//    What is the runtime complexity of your solution?
+//    HINT: Try to break down the problems into smaller steps. For example,
+//          find a convenient way to represent rectangles and define a function
+//          that tests whether one rectangle is inside another. Then test your
+//          code on just two rectangles first to make sure it works.
+
+var rect1 = [
+  [2],
+  [1, 1, 7, 10],
+  [3, 5, 10, 8]
+];
+var rect2 = [
+  [2],
+  [3, 2, 5, 8],
+  [7, 3, 10, 10]
+];
+var rect3 = [
+  [4],
+  [1, 1, 5, 5],
+  [3, 2, 6, 4],
+  [4, 8, 8, 10],
+  [3, 9, 7, 10]
+];
+
+function Rectangle(x1, y1, x2, y2) {
+  this.x1 = x1;
+  this.y1 = y1;
+  this.x2 = x2;
+  this.y2 = y2;
+}
+
+function intersects(a, b) {
+  return (a.x1 < b.x2) && (b.x1 < a.x2) && (a.y1 < b.y2) && (b.y1 < a.y2);
+}
+
+function checkOverlaps(rect) {
+  var overlaps = 0;
+
+  var rects = rect[0][0];
+  for(var i = 1; i <= rects; i++) {
+    var coordPairsA = rect[i];
+    var x1 = coordPairsA[0];
+    var y1 = coordPairsA[1];
+    var x2 = coordPairsA[2];
+    var y2 = coordPairsA[3];
+
+    for(var j = i + 1; j <= rects; j++) {
+      var coordPairsB = rect[j];
+      var xx1 = coordPairsB[0];
+      var yy1 = coordPairsB[1];
+      var xx2 = coordPairsB[2];
+      var yy2 = coordPairsB[3];
+
+      var rectA = new Rectangle(x1, y1, x2, y2);
+      var rectB = new Rectangle(xx1, yy1, xx2, yy2);
+
+      if(intersects(rectA, rectB)) {
+        overlaps++;
+      }
+    }
+  }
+
+  return overlaps;
+}
+
+console.log(checkOverlaps(rect1));
+console.log(checkOverlaps(rect2));
+console.log(checkOverlaps(rect3));
+
+/*
+  Time complexity is: O(n^2)
+*/
+
+</script>
+</head>
+<body>
+  See console!
+</body>
+</html>
